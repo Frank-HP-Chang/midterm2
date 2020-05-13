@@ -78,19 +78,20 @@ def ml_loop(side: "1P"):
         # 3.3. Put the code here to handle the scene information
 
         # 3.4. Send the instruction for this frame to the game process
-        if not ball_served:
-            comm.send_to_game({"frame": scene_info["frame"], "command": "SERVE_TO_LEFT"})
-            ball_served = True
-        else:
-                
-            y = clf.predict(feature)
-            
-            if y == 0:
-                comm.send_to_game({"frame": scene_info["frame"], "command": "NONE"})
-                print('NONE')
-            elif y ==1:
-                comm.send_to_game({"frame": scene_info["frame"], "command": "MOVE_LEFT"})
-                print('LEFT')
+        if scene_info["frame"]>1500:
+            if not ball_served:
+                comm.send_to_game({"frame": scene_info["frame"], "command": "SERVE_TO_LEFT"})
+                ball_served = True
             else:
-                comm.send_to_game({"frame": scene_info["frame"], "command": "MOVE_RIGHT"})
-                #print('RIGHT')
+
+                y = clf.predict(feature)
+
+                if y == 0:
+                    comm.send_to_game({"frame": scene_info["frame"], "command": "NONE"})
+                    print('NONE')
+                elif y ==1:
+                    comm.send_to_game({"frame": scene_info["frame"], "command": "MOVE_LEFT"})
+                    print('LEFT')
+                else:
+                    comm.send_to_game({"frame": scene_info["frame"], "command": "MOVE_RIGHT"})
+                    #print('RIGHT')
